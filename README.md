@@ -157,7 +157,7 @@ $uid = 500;
 $messages = $imap->getMessages();
 
 foreach( $messages as $message ) {
-	// ...
+  // ...
 }
 ```
 
