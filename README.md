@@ -22,16 +22,16 @@ composer require port-adhoc/imap-php
 
 # Function list
 - [`Imap::`](#imap)
--- [`construct`](#imap-construct)
--- [`properties`](#imap-properties)
--- [`connect`](#connect)
--- [`getConnectionString`](#getconnectionstring)
--- [`getMessage`](#getmessage)
--- [`getMessages`](#getmessages)
+  - [`construct`](#imap-construct)
+  - [`properties`](#imap-properties)
+  - [`connect`](#connect)
+  - [`getConnectionString`](#getconnectionstring)
+  - [`getMessage`](#getmessage)
+  - [`getMessages`](#getmessages)
 - [`Message::`](#message)
--- [`construct`](#message-construct)
+  - [`construct`](#message-construct)
 - [`Email::`](#email)
--- [`construct`](#email-construct)
+  - [`construct`](#email-construct)
 
 ## Imap
 
