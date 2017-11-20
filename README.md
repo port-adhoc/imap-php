@@ -49,6 +49,7 @@ $imap = new Imap;
 ```
 
 [back to function list](#function-list)
+
 [back to summary](#summary)
 
 ### Imap properties
@@ -65,6 +66,7 @@ public string $end; // uid
 ```
 
 [back to function list](#function-list)
+
 [back to summary](#summary)
 
 ### connect
@@ -92,6 +94,7 @@ $imap->connect();
 ```
 
 [back to function list](#function-list)
+
 [back to summary](#summary)
 
 ### getMessage
@@ -123,6 +126,7 @@ $message = $imap->getMessage( $uid );
 ```
 
 [back to function list](#function-list)
+
 [back to summary](#summary)
 
 ### getMessages
@@ -158,6 +162,7 @@ foreach( $messages as $message ) {
 ```
 
 [back to function list](#function-list)
+
 [back to summary](#summary)
 
 ### getConnectionString
@@ -185,4 +190,5 @@ $cs = $imap->getConnectionString();
 ```
 
 [back to function list](#function-list)
+
 [back to summary](#summary)
