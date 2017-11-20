@@ -1,5 +1,5 @@
 {
-    "name": "port-adhoc/imap-php",
+    "name": "port-adhoc/imap",
     "description": "Imap class for PHP",
     "type": "library",
     "license": "Port Adhoc",
