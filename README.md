@@ -25,8 +25,8 @@ composer require port-adhoc/imap
 
 # Function list
 - [`Attachment::`](#attachment)
-  - [#getName](#getname)
-  - [#getContent](#getcontent)
+  - [`getName`](#getname)
+  - [`getContent`](#getcontent)
 - [`Email::`](#email)
   - [`properties`](#email-properties)
 - [`Imap::`](#imap)
