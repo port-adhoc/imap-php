@@ -439,15 +439,6 @@
 		}
 
 		/**
-		 * @return int
-		 */
-		public function getSize() {
-			$this->getHeaderInfo();
-
-			return (int) $this->header->size;
-		}
-
-		/**
 		 * @return bool
 		 */
 		public function isAnswered() {
