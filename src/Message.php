@@ -13,7 +13,7 @@
 		const SECTION_TEXT_PLAIN = '1.1';
 		const SECTION_HTML = '1.2';
 
-		const SUBTYPE_TEXT = 'TEXT';
+		const SUBTYPE_TEXT = 'PLAIN';
 		const SUBTYPE_HTML = 'HTML';
 
 		/** 
