@@ -417,7 +417,7 @@
 
 			$property = 'in_reply_to';
 
-			return property_exists($this->header, $property) ? (string) $this->header->${$property} : null;
+			return property_exists($this->header, $property) ? (string) $this->header->{$property} : null;
 		}
 
 		/**
