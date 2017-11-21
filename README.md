@@ -156,8 +156,6 @@ $imap->end = '500'; // uid
 
 $imap->connect();
 
-$uid = 500;
-
 $messages = $imap->getMessages();
 
 foreach( $messages as $message ) {
