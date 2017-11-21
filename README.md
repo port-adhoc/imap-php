@@ -209,6 +209,15 @@ $imap->start = '1'; // uid
 $imap->end = '500'; // uid
 
 $cs = $imap->getConnectionString();
+
+echo $cs;
+```
+
+Result:
+
+```bash
+> php script.php
+{example.host.com:993/imap/ssl/readonly}INBOX/folder
 ```
 
 [back to function list](#function-list)
@@ -245,4 +254,13 @@ $from = $message->getFrom();
 
 $email = $from->email;
 $name = $from->name;
+
+echo $name . ' ' . $email;
+```
+
+Result:
+
+```bash
+> php script.php
+John Doe john.doe@contoso.com
 ```
