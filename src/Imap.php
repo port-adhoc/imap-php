@@ -81,7 +81,7 @@
 		public function connect() {
 			$begin = microtime(true);
 
-			$this->imap_handler = imap_open( $this->getConnectionString(), $this->user, $this->password );
+			$this->imap_handler = @imap_open( $this->getConnectionString(), $this->user, $this->password );
 
 			$end = microtime(true);
 
