@@ -24,6 +24,11 @@ composer require port-adhoc/imap
 [back to summary](#summary)
 
 # Function list
+- [`Attachment::`](#attachment)
+  - [#getName](#getname)
+  - [#getContent](#getcontent)
+- [`Email::`](#email)
+  - [`properties`](#email-properties)
 - [`Imap::`](#imap)
   - [`construct`](#imap-construct)
   - [`properties`](#imap-properties)
@@ -54,8 +59,101 @@ composer require port-adhoc/imap
   - [`isAnswered`](#isAnswered)
   - [`isDeleted`](#isdeleted)
   - [`isDraft`](#isdraft)
-- [`Email::`](#email)
-  - [`properties`](#email-properties)
+
+## Attachment
+
+### getName
+
+```php
+public function getName(): string
+```
+
+Example:
+
+```php
+use PortAdhoc\Imap\Imap;
+
+$imap = new Imap;
+
+$imap->server = 'example.host.com';
+$imap->port = 993;
+$imap->flags = ['imap', 'ssl', 'readonly'];
+$imap->user = 'example@host.com';
+$imap->password = 'example';
+$imap->mailbox = 'INBOX'; // or INBOX/folder
+$imap->start = '500'; // uid
+$imap->end = '500'; // uid
+
+$imap->connect();
+
+$uid = 500;
+
+$message = $imap->getMessage( $uid );
+
+$attachments = $message->getAttachments();
+
+foreach( $attachments as $attachment ) {
+	$name = $attachment->getName();
+
+	echo $name;
+}
+```
+
+Result:
+
+```bash
+> php script.php
+reporting result quarter 4.xlsx
+```
+
+### getContent
+
+```php
+public function getContent(): string
+```
+
+Example:
+
+```php
+use PortAdhoc\Imap\Imap;
+
+$imap = new Imap;
+
+$imap->server = 'example.host.com';
+$imap->port = 993;
+$imap->flags = ['imap', 'ssl', 'readonly'];
+$imap->user = 'example@host.com';
+$imap->password = 'example';
+$imap->mailbox = 'INBOX'; // or INBOX/folder
+$imap->start = '500'; // uid
+$imap->end = '500'; // uid
+
+$imap->connect();
+
+$uid = 500;
+
+$message = $imap->getMessage( $uid );
+
+$attachments = $message->getAttachments();
+
+foreach( $attachments as $attachment ) {
+	$name = $attachment->getName();
+	$content = $attachement->getContent();
+	$path = __DIR__ . '/' . $name; // inside the current repository
+
+	file_put_contents( $path, $content );
+}
+```
+
+Result:
+
+```bash
+/vendor
+composer.json
+composer.lock
+script.php
+reporting result quarter 4.xlsx
+```
 
 ## Imap
 
