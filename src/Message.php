@@ -172,11 +172,13 @@
 
 			$emails = [];
 
-			foreach( $this->header->to as $to ) {
-				$name = $to->personal;
-				$email = $to->mailbox . '@' . $to->host;
+			if( property_exists($this->header, 'to') ) {
+				foreach( $this->header->to as $to ) {
+					$name = $to->personal;
+					$email = $to->mailbox . '@' . $to->host;
 
-				$emails[] = new Email( $name, $email );
+					$emails[] = new Email( $name, $email );
+				}				
 			}
 
 			return $emails;
