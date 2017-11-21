@@ -158,7 +158,7 @@
 		public function getFrom() {
 			$this->getHeaderInfo();
 
-			$name = $this->header->from[0]->personal;
+			$name = property_exists($this->header->from[0], 'personal') ? $this->header->from[0]->personal : null;
 			$email = $this->header->from[0]->mailbox . '@' . $this->header->from[0]->host;
 
 			return new Email( $name, $email );
@@ -284,7 +284,7 @@
 
 		private function getHeaderInfo() {
 			if( ! $this->header_fetched ) {
-				$this->header = imap_rfc822_parse_headers(imap_fetchbody( $this->imap_handler, $this->uid, $this->header_section, FT_UID & FT_PEEK ));
+				$this->header = imap_headerinfo( $this->imap_handler, imap_msgno($this->imap_handler, $this->uid) );
 
 				$this->header_fetched = true;
 			}
