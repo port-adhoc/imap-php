@@ -1,5 +1,4 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/port-adhoc/imap.svg)]()
-[![Packagist](https://img.shields.io/packagist/v/port-adhoc/imap.svg)]()
 [![Licence](https://img.shields.io/badge/licence-MIT-blue.svg)]()
 
 # imap-php
@@ -15,7 +14,7 @@ Uid oriented Imap class
 In your repository :
 
 ```bash
-composer require port-adhoc/imap-php
+composer require port-adhoc/imap
 ```
 
 [back to summary](#summary)
@@ -31,11 +30,25 @@ composer require port-adhoc/imap-php
   - [`connect`](#connect)
   - [`getConnectionString`](#getconnectionstring)
   - [`getMessage`](#getmessage)
-  - [`getMessages`](#getmessages)
+  - [`getMessages`](#getmessages)  
 - [`Message::`](#message)
-  - [`construct`](#message-construct)
+  - [`getBCC`](#getbcc)
+  - [`getCC`](#getcc)
+  - [`getDate`](#getdate)
+  - [`getFrom`](#getfrom)
+  - [`getHtml`](#gethtml)
+  - [`getImap`](#getimap)
+  - [`getInReplyTo`](#getinreplyto)
+  - [`getPlainText`](#getplaintext)
+  - [`getReplyTo`](#getreplyto)
+  - [`getReturnPath`](#getreturnpath)
+  - [`getSender`](#getsender)
+  - [`getStructure`](#getstructure)
+  - [`getSubject`](#getsubject)
+  - [`getTo`](#getto)
+  - [`getUid`](#getuid)
 - [`Email::`](#email)
-  - [`construct`](#email-construct)
+  - [`properties`](#email-properties)
 
 ## Imap
 
@@ -103,7 +116,7 @@ $imap->connect();
 
 ### getMessage
 ```php
-public function getMessage( int $uid ) : PortAdhoc\Imap\Message
+public function getMessage( int $uid ): PortAdhoc\Imap\Message
 ```
 
 Example:
@@ -135,7 +148,7 @@ $message = $imap->getMessage( $uid );
 
 ### getMessages
 ```php
-public function getMessages() : PortAdhoc\Imap\Message[]
+public function getMessages(): PortAdhoc\Imap\Message[]
 ```
 
 Example:
@@ -169,7 +182,7 @@ foreach( $messages as $message ) {
 
 ### getConnectionString
 ```php
-public function getConnectionString() : string
+public function getConnectionString(): string
 ```
 
 Example:
@@ -194,3 +207,35 @@ $cs = $imap->getConnectionString();
 [back to function list](#function-list)
 
 [back to summary](#summary)
+
+## Email
+
+### Email properties
+```php
+public $email;
+public $name;
+```
+
+Example:
+
+```php
+use PortAdhoc\Imap\Imap;
+
+$imap = new Imap;
+
+$imap->server = 'example.host.com';
+$imap->port = 993;
+$imap->flags = ['imap', 'ssl', 'readonly'];
+$imap->user = 'example@host.com';
+$imap->password = 'example';
+$imap->mailbox = 'INBOX';
+
+$uid = 500;
+
+$message = $imap->getMessage( $uid );
+
+$from = $message->getFrom();
+
+$email = $from->email;
+$name = $from->name;
+```
