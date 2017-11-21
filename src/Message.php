@@ -392,21 +392,21 @@
 		}
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
 		public function getDate() {
 			$this->getHeaderInfo();
 
-			return (new DateTime( $this->header->date ))->format('Y-m-d H:i:s');
+			return property_exists($this->header, 'date') ? (new DateTime( $this->header->date ))->format('Y-m-d H:i:s') : null;
 		}
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
 		public function getSubject() {
 			$this->getHeaderInfo();
 
-			return property_exists($this->header, 'subject') ? imap_utf8($this->header->subject) : ( property_exists($this->header, 'Subject') ? imap_utf8($this->header->Subject) : '' );
+			return property_exists($this->header, 'subject') ? imap_utf8($this->header->subject) : ( property_exists($this->header, 'Subject') ? imap_utf8($this->header->Subject) : null );
 		}
 
 		/**
