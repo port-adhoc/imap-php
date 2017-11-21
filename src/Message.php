@@ -209,34 +209,71 @@
 
 				if( property_exists( $this->structure, 'parts' ) ) {
 					foreach( $this->structure->parts as $index => $part ) {
-						if( $part->type == TYPETEXT && strtoupper($part->subtype) == self::SUBTYPE_HTML ) {
-							$this->html_transfer_encoding = $part->encoding;
-							$this->html_section = $index + 1;
-						}
-						else if( $part->type == TYPETEXT && strtoupper($part->subtype) == self::SUBTYPE_TEXT ) {
-							$this->plain_text_transfer_encoding = $part->encoding;
-							$this->plain_text_section = $index + 1;
-						}
-						
-						if( $part->ifdisposition && strtolower($part->disposition) == 'attachment' && in_array($part->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {
-							$attachement_section = [
-								'section' => $index + 1,
-								'encoding' => $part->encoding,
-								'filename' => $this->uid . '-' . (new DateTime())->getTimestamp() . 'txt'
-							];
+						if( property_exists( $part, 'parts' ) ) {
+							if( property_exists( $this->structure, 'parts' ) ) {
+								foreach( $part->parts as $index => $sub_part ) {
+									if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_HTML ) {
+										$this->html_transfer_encoding = $sub_part->encoding;
+										$this->html_section = $index + 1;
+									}
+									else if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_TEXT ) {
+										$this->plain_text_transfer_encoding = $sub_part->encoding;
+										$this->plain_text_section = $index + 1;
+									}
+									
+									if( $sub_part->ifdisposition && strtolower($sub_part->disposition) == 'attachment' && in_array($sub_part->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {
+										$attachement_section = [
+											'section' => $index + 1,
+											'encoding' => $sub_part->encoding,
+											'filename' => $this->uid . '-' . (new DateTime())->getTimestamp() . 'txt'
+										];
 
-							if( $part->ifdparameters ) {
-								foreach( $part->dparameters as $dparameter ) {
-									if( strtolower($dparameter->attribute) == 'filename' ) {
-										$attachement_section['filename'] = $dparameter->value;
+										if( $sub_part->ifdparameters ) {
+											foreach( $sub_part->dparameters as $dparameter ) {
+												if( strtolower($dparameter->attribute) == 'filename' ) {
+													$attachement_section['filename'] = $dparameter->value;
+												}
+											}
+										}
+										else if( $sub_part->ifdescription ) {
+											$attachement_section['filename'] = $sub_part->description;
+										}
+
+										$this->attachements_sections[] = $attachement_section;
+									}
+								}					
+							}
+						}
+						else {
+							if( $part->type == TYPETEXT && strtoupper($part->subtype) == self::SUBTYPE_HTML ) {
+								$this->html_transfer_encoding = $part->encoding;
+								$this->html_section = $index + 1;
+							}
+							else if( $part->type == TYPETEXT && strtoupper($part->subtype) == self::SUBTYPE_TEXT ) {
+								$this->plain_text_transfer_encoding = $part->encoding;
+								$this->plain_text_section = $index + 1;
+							}
+							
+							if( $part->ifdisposition && strtolower($part->disposition) == 'attachment' && in_array($part->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {
+								$attachement_section = [
+									'section' => $index + 1,
+									'encoding' => $part->encoding,
+									'filename' => $this->uid . '-' . (new DateTime())->getTimestamp() . 'txt'
+								];
+
+								if( $part->ifdparameters ) {
+									foreach( $part->dparameters as $dparameter ) {
+										if( strtolower($dparameter->attribute) == 'filename' ) {
+											$attachement_section['filename'] = $dparameter->value;
+										}
 									}
 								}
-							}
-							else if( $part->ifdescription ) {
-								$attachement_section['filename'] = $part->description;
-							}
+								else if( $part->ifdescription ) {
+									$attachement_section['filename'] = $part->description;
+								}
 
-							$this->attachements_sections[] = $attachement_section;
+								$this->attachements_sections[] = $attachement_section;
+							}
 						}
 					}					
 				}
