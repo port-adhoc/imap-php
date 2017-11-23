@@ -115,7 +115,7 @@
 		public function getRaw() {
 			$begin = microtime(true);
 
-			$this->raw = imap_body( $this->imap_handler, $this->uid, FT_UID & FT_PEEK );
+			$this->raw = imap_body( $this->imap_handler, $this->uid, FT_UID && FT_PEEK );
 
 			$this->raw_fetching_time = microtime(true) - $begin;
 
@@ -136,7 +136,7 @@
 
 			$this->getStruct();
 
-			$plain_text = imap_fetchbody( $this->imap_handler, $this->uid, $this->plain_text_section, FT_UID & FT_PEEK );
+			$plain_text = imap_fetchbody( $this->imap_handler, $this->uid, $this->plain_text_section, FT_UID && FT_PEEK );
 
 			$plain_text = StringDecoder::getDecodedString( $plain_text, $this->plain_text_transfer_encoding );
 
@@ -192,7 +192,7 @@
 
 			$this->getStruct();
 
-			$html = imap_fetchbody( $this->imap_handler, $this->uid, $this->html_section, FT_UID & FT_PEEK );
+			$html = imap_fetchbody( $this->imap_handler, $this->uid, $this->html_section, FT_UID && FT_PEEK );
 
 			$html = StringDecoder::getDecodedString( $html, $this->html_transfer_encoding );
 
@@ -203,7 +203,7 @@
 
 		private function getStruct() {
 			if( ! $this->structure_fetched ) {
-				$this->structure = imap_fetchstructure($this->imap_handler, $this->uid, FT_UID & FT_PEEK);
+				$this->structure = imap_fetchstructure($this->imap_handler, $this->uid, FT_UID && FT_PEEK);
 
 				if( $this->structure->type == TYPEMULTIPART) {
 					$this->header_section = 0;
