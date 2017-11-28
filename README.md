@@ -363,3 +363,7 @@ Result:
 > php script.php
 John Doe john.doe@contoso.com
 ```
+
+[back to function list](#function-list)
+
+[back to summary](#summary)
