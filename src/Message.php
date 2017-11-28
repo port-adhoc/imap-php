@@ -174,7 +174,7 @@
 
 			if( property_exists($this->header, 'to') ) {
 				foreach( $this->header->to as $to ) {
-					$name = $to->personal;
+					$name = property_exists($to, 'personal') ? $to->personal : null;
 					$email = $to->mailbox . '@' . $to->host;
 
 					$emails[] = new Email( $name, $email );
@@ -311,12 +311,12 @@
 
 			if( property_exists( $this->header, 'cc' ) ) {
 				foreach( $this->header->cc as $cc ) {
-					$name = $cc->personal;
+					$name = property_exists($cc, 'personal') ? $cc->personal : null;
 					$email = $cc->mailbox . '@' . $cc->host;
 
 					$emails[] = new Email( $name, $email );
 				}	
-			}		
+			}
 
 			return $emails;
 		}
@@ -331,7 +331,7 @@
 
 			if( property_exists( $this->header, 'bcc' ) ) {
 				foreach( $this->header->bcc as $bcc ) {
-					$name = $bcc->personal;
+					$name = property_exists($bcc, 'personal') ? $bcc->personal : null;
 					$email = $bcc->mailbox . '@' . $bcc->host;
 
 					$emails[] = new Email( $name, $email );
@@ -368,7 +368,7 @@
 			$emails = [];
 
 			foreach( $this->header->sender as $sender ) {
-				$name = $sender->personal;
+				$name = property_exists($sender, 'personal') ? $sender->personal : null;
 				$email = $sender->mailbox . '@' . $sender->host;
 
 				$emails[] = new Email( $name, $email );
