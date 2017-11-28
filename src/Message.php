@@ -167,7 +167,7 @@
 
 					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-					$name = iconv( $charset, $encoding, $decoded[0]->text );
+					$name = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 				}
 
 				$email = property_exists($this->header->from[0], 'mailbox') && property_exists($this->header->from[0], 'host') ? ($this->header->from[0]->mailbox . '@' . $this->header->from[0]->host) : null;
@@ -196,7 +196,7 @@
 
 						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-						$name = iconv( $charset, $encoding, $decoded[0]->text );
+						$name = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 					}
 
 					$email = $to->mailbox . '@' . $to->host;
@@ -342,7 +342,7 @@
 
 						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-						$name = iconv( $charset, $encoding, $decoded[0]->text );
+						$name = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 					}
 
 					$email = $cc->mailbox . '@' . $cc->host;
@@ -371,7 +371,7 @@
 
 						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-						$name = iconv( $charset, $encoding, $decoded[0]->text );
+						$name = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 					}
  					
 					$email = $bcc->mailbox . '@' . $bcc->host;
@@ -399,7 +399,7 @@
 
 					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-					$name = iconv( $charset, $encoding, $decoded[0]->text );
+					$name = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 				}
 
 				$email = $reply_to->mailbox . '@' . $reply_to->host;
@@ -426,7 +426,7 @@
 
 					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-					$name = iconv( $charset, $encoding, $decoded[0]->text );
+					$name = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 				}
 				
 				$email = $sender->mailbox . '@' . $sender->host;
@@ -453,7 +453,7 @@
 
 					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-					$name = iconv( $charset, $encoding, $decoded[0]->text );
+					$name = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 				}
 				
 				$email = $return_path->mailbox . '@' . $return_path->host;
@@ -486,14 +486,14 @@
 
 				$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-				$subject = iconv( $charset, $encoding, $decoded[0]->text );
+				$subject = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 			}
 			else if( property_exists($this->header, 'Subject') ) {
 				$decoded = imap_mime_header_decode($this->header->subject);
 
 				$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-				$subject = iconv( $charset, $encoding, $decoded[0]->text );
+				$subject = iconv( $charset, $encoding . '//IGNORE', $decoded[0]->text );
 			}
 
 			return $subject;
