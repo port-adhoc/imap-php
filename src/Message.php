@@ -153,15 +153,20 @@
 		}
 
 		/**
-		 * @return PortAdhoc\Imap\Email
+		 * @return PortAdhoc\Imap\Email|null
 		 */
 		public function getFrom() {
 			$this->getHeaderInfo();
 
-			$name = property_exists($this->header->from[0], 'personal') ? $this->header->from[0]->personal : null;
-			$email = property_exists($this->header->from[0], 'mailbox') && property_exists($this->header->from[0], 'host') ? ($this->header->from[0]->mailbox . '@' . $this->header->from[0]->host) : null;
+			if( property_exists( $this->header, 'from' ) ) {
+				$name = property_exists($this->header->from[0], 'personal') ? $this->header->from[0]->personal : null;
+				$email = property_exists($this->header->from[0], 'mailbox') && property_exists($this->header->from[0], 'host') ? ($this->header->from[0]->mailbox . '@' . $this->header->from[0]->host) : null;
 
-			return new Email( $name, $email );
+				return new Email( $name, $email );	
+			}
+			else {
+				return null;
+			}			
 		}
 
 		/**
