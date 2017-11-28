@@ -1,5 +1,6 @@
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/port-adhoc/imap.svg)]()
-[![Licence](https://img.shields.io/badge/licence-MIT-blue.svg)]()
+![Packagist minimum PHP version](https://img.shields.io/packagist/php-v/port-adhoc/imap.svg)
+![Packagist licence](https://img.shields.io/packagist/l/port-adhoc/imap.svg)
+![Packagist version](https://img.shields.io/packagist/v/port-adhoc/imap.svg)
 
 # imap-php
 Uid oriented Imap class
