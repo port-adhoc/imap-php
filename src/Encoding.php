@@ -1,5 +1,5 @@
 <?php
-	namespace PortAdhoc\Encoding;
+	namespace PortAdhoc\Imap;
 
 	class Encoding {
 		const UTF_8 = 'UTF-8';
