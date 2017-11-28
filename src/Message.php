@@ -420,14 +420,14 @@
 			if( property_exists($this->header, 'subject') ) {
 				$decoded = imap_mime_header_decode($this->header->subject);
 
-				$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $charset;
+				$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
 				$subject = iconv( $charset, 'UTF-8', $decoded[0]->text );
 			}
 			else if( property_exists($this->header, 'Subject') ) {
 				$decoded = imap_mime_header_decode($this->header->subject);
 
-				$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $charset;
+				$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
 				$subject = iconv( $charset, 'UTF-8', $decoded[0]->text );
 			}
