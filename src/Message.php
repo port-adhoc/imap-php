@@ -435,7 +435,7 @@
 		public function getMessageId() {
 			$this->getHeaderInfo();
 
-			return (string) $this->header->message_id;
+			return property_exists($this->header, 'message_id') ? $this->header->message_id : null;
 		}
 
 		/**
