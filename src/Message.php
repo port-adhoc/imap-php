@@ -7,6 +7,7 @@
 	use DateTime;
 	use PortAdhoc\Imap\Attachment;
 	use PortAdhoc\Imap\StringDecoder;
+	use PortAdhoc\Imap\Encoding;
 
 	class Message {
 		const SECTION_BODY = '0';
@@ -155,7 +156,7 @@
 		/**
 		 * @return PortAdhoc\Imap\Email|null
 		 */
-		public function getFrom() {
+		public function getFrom( $encoding = Encoding::UTF_8 ) {
 			$this->getHeaderInfo();
 
 			if( property_exists( $this->header, 'from' ) ) {
@@ -166,7 +167,7 @@
 
 					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-					$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+					$name = iconv( $charset, $encoding, $decoded[0]->text );
 				}
 
 				$email = property_exists($this->header->from[0], 'mailbox') && property_exists($this->header->from[0], 'host') ? ($this->header->from[0]->mailbox . '@' . $this->header->from[0]->host) : null;
@@ -181,7 +182,7 @@
 		/**
 		 * @return array
 		 */
-		public function getTo() {
+		public function getTo( $encoding = Encoding::UTF_8 ) {
 			$this->getHeaderInfo();
 
 			$emails = [];
@@ -195,7 +196,7 @@
 
 						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-						$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+						$name = iconv( $charset, $encoding, $decoded[0]->text );
 					}
 
 					$email = $to->mailbox . '@' . $to->host;
@@ -327,7 +328,7 @@
 		/**
 		 * @return array
 		 */
-		public function getCC() {
+		public function getCC( $encoding = Encoding::UTF_8 ) {
 			$this->getHeaderInfo();
 
 			$emails = [];
@@ -341,7 +342,7 @@
 
 						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-						$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+						$name = iconv( $charset, $encoding, $decoded[0]->text );
 					}
 
 					$email = $cc->mailbox . '@' . $cc->host;
@@ -356,7 +357,7 @@
 		/**
 		 * @return array
 		 */
-		public function getBCC() {
+		public function getBCC( $encoding = Encoding::UTF_8 ) {
 			$this->getHeaderInfo();
 
 			$emails = [];
@@ -370,7 +371,7 @@
 
 						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-						$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+						$name = iconv( $charset, $encoding, $decoded[0]->text );
 					}
  					
 					$email = $bcc->mailbox . '@' . $bcc->host;
@@ -385,7 +386,7 @@
 		/**
 		 * @return array
 		 */
-		public function getReplyTo() {
+		public function getReplyTo( $encoding = Encoding::UTF_8 ) {
 			$this->getHeaderInfo();
 
 			$emails = [];
@@ -398,7 +399,7 @@
 
 					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-					$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+					$name = iconv( $charset, $encoding, $decoded[0]->text );
 				}
 
 				$email = $reply_to->mailbox . '@' . $reply_to->host;
@@ -412,7 +413,7 @@
 		/**
 		 * @return array
 		 */
-		public function getSender() {
+		public function getSender( $encoding = Encoding::UTF_8 ) {
 			$this->getHeaderInfo();
 
 			$emails = [];
@@ -425,7 +426,7 @@
 
 					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-					$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+					$name = iconv( $charset, $encoding, $decoded[0]->text );
 				}
 				
 				$email = $sender->mailbox . '@' . $sender->host;
@@ -439,7 +440,7 @@
 		/**
 		 * @return array
 		 */
-		public function getReturnPath() {
+		public function getReturnPath( $encoding = Encoding::UTF_8 ) {
 			$this->getHeaderInfo();
 
 			$emails = [];
@@ -452,7 +453,7 @@
 
 					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-					$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+					$name = iconv( $charset, $encoding, $decoded[0]->text );
 				}
 				
 				$email = $return_path->mailbox . '@' . $return_path->host;
@@ -475,7 +476,7 @@
 		/**
 		 * @return string|null
 		 */
-		public function getSubject() {
+		public function getSubject( $encoding = Encoding::UTF_8 ) {
 			$this->getHeaderInfo();
 
 			$subject = null;
@@ -485,14 +486,14 @@
 
 				$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-				$subject = iconv( $charset, 'UTF-8', $decoded[0]->text );
+				$subject = iconv( $charset, $encoding, $decoded[0]->text );
 			}
 			else if( property_exists($this->header, 'Subject') ) {
 				$decoded = imap_mime_header_decode($this->header->subject);
 
 				$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
 
-				$subject = iconv( $charset, 'UTF-8', $decoded[0]->text );
+				$subject = iconv( $charset, $encoding, $decoded[0]->text );
 			}
 
 			return $subject;
