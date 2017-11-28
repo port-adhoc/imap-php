@@ -309,12 +309,14 @@
 
 			$emails = [];
 
-			foreach( $this->header->cc as $cc ) {
-				$name = $cc->personal;
-				$email = $cc->mailbox . '@' . $cc->host;
+			if( property_exists( $this->header, 'cc' ) ) {
+				foreach( $this->header->cc as $cc ) {
+					$name = $cc->personal;
+					$email = $cc->mailbox . '@' . $cc->host;
 
-				$emails[] = new Email( $name, $email );
-			}
+					$emails[] = new Email( $name, $email );
+				}	
+			}		
 
 			return $emails;
 		}
@@ -327,12 +329,14 @@
 
 			$emails = [];
 
-			foreach( $this->header->bcc as $bcc ) {
-				$name = $bcc->personal;
-				$email = $bcc->mailbox . '@' . $bcc->host;
+			if( property_exists( $this->header, 'bcc' ) ) {
+				foreach( $this->header->bcc as $bcc ) {
+					$name = $bcc->personal;
+					$email = $bcc->mailbox . '@' . $bcc->host;
 
-				$emails[] = new Email( $name, $email );
-			}
+					$emails[] = new Email( $name, $email );
+				}	
+			}			
 
 			return $emails;
 		}
