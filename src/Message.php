@@ -159,7 +159,7 @@
 			$this->getHeaderInfo();
 
 			if( property_exists( $this->header, 'from' ) ) {
-				$name = property_exists($this->header->from[0], 'personal') ? $this->header->from[0]->personal : null;
+				$name = property_exists($this->header->from[0], 'personal') ? imap_utf8($this->header->from[0]->personal) : null;
 				$email = property_exists($this->header->from[0], 'mailbox') && property_exists($this->header->from[0], 'host') ? ($this->header->from[0]->mailbox . '@' . $this->header->from[0]->host) : null;
 
 				return new Email( $name, $email );	
