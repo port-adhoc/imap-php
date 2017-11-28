@@ -415,7 +415,20 @@
 		public function getSubject() {
 			$this->getHeaderInfo();
 
-			return property_exists($this->header, 'subject') ? imap_utf8($this->header->subject) : ( property_exists($this->header, 'Subject') ? imap_utf8($this->header->Subject) : null );
+			$subject = null;
+
+			if( property_exists($this->header, 'subject') ) {
+				$decoded = imap_mime_header_decode($this->header->subject);
+
+				$subject = iconv( $decoded[0]->charset, 'UTF-8', $decoded[0]->text );
+			}
+			else if( property_exists($this->header, 'Subject') ) {
+				$decoed = imap_mime_header_decode($this->header->subject);
+
+				$subject = iconv( $decoded[0]->charset, 'UTF-8', $decoded[0]->text );
+			}
+
+			return $subject;
 		}
 
 		/**
