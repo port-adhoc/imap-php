@@ -159,7 +159,16 @@
 			$this->getHeaderInfo();
 
 			if( property_exists( $this->header, 'from' ) ) {
-				$name = property_exists($this->header->from[0], 'personal') ? imap_utf8($this->header->from[0]->personal) : null;
+				$name = null;
+
+				if( property_exists($this->header->from[0], 'personal') ) {
+					$decoded = imap_mime_header_decode( $this->header->from[0]->personal );
+
+					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
+
+					$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+				}
+
 				$email = property_exists($this->header->from[0], 'mailbox') && property_exists($this->header->from[0], 'host') ? ($this->header->from[0]->mailbox . '@' . $this->header->from[0]->host) : null;
 
 				return new Email( $name, $email );	
@@ -179,7 +188,16 @@
 
 			if( property_exists($this->header, 'to') ) {
 				foreach( $this->header->to as $to ) {
-					$name = property_exists($to, 'personal') ? $to->personal : null;
+					$name = null;
+
+					if( property_exists($to, 'personal') ) {
+						$decoded = imap_mime_header_decode($to->personal);
+
+						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
+
+						$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+					}
+
 					$email = $to->mailbox . '@' . $to->host;
 
 					$emails[] = new Email( $name, $email );
@@ -316,7 +334,16 @@
 
 			if( property_exists( $this->header, 'cc' ) ) {
 				foreach( $this->header->cc as $cc ) {
-					$name = property_exists($cc, 'personal') ? $cc->personal : null;
+					$name = null;
+
+					if( property_exists( $cc, 'personal' ) ) {
+						$decoded = imap_mime_header_decode($cc->personal);
+
+						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
+
+						$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+					}
+
 					$email = $cc->mailbox . '@' . $cc->host;
 
 					$emails[] = new Email( $name, $email );
@@ -336,7 +363,16 @@
 
 			if( property_exists( $this->header, 'bcc' ) ) {
 				foreach( $this->header->bcc as $bcc ) {
-					$name = property_exists($bcc, 'personal') ? $bcc->personal : null;
+					$name = null;
+
+					if( property_exists($bcc, 'personal') ) {
+						$decoded = imap_mime_header_decode($bcc->personal);
+
+						$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
+
+						$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+					}
+ 					
 					$email = $bcc->mailbox . '@' . $bcc->host;
 
 					$emails[] = new Email( $name, $email );
@@ -355,7 +391,16 @@
 			$emails = [];
 
 			foreach( $this->header->reply_to as $reply_to ) {
-				$name = $reply_to->personal;
+				$name = null;
+
+				if( property_exists( $reply_to, 'personal' ) ) {
+					$decoded = imap_mime_header_decode($reply_to->personal);
+
+					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
+
+					$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+				}
+
 				$email = $reply_to->mailbox . '@' . $reply_to->host;
 
 				$emails[] = new Email( $name, $email );
@@ -373,7 +418,16 @@
 			$emails = [];
 
 			foreach( $this->header->sender as $sender ) {
-				$name = property_exists($sender, 'personal') ? $sender->personal : null;
+				$name = null;
+
+				if( property_exists( $sender, 'personal' ) ) {
+					$decoded = imap_mime_header_decode($sender->personal);
+
+					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
+
+					$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+				}
+				
 				$email = $sender->mailbox . '@' . $sender->host;
 
 				$emails[] = new Email( $name, $email );
@@ -391,7 +445,16 @@
 			$emails = [];
 
 			foreach( $this->header->return_path as $return_path ) {
-				$name = $return_path->personal;
+				$name = null;
+
+				if( property_exists( $return_path, 'personal' ) ) {
+					$decoded = imap_mime_header_decode($return_path->personal);
+
+					$charset = $decoded[0]->charset === 'default' ? 'ASCII' : $decoded[0]->charset;
+
+					$name = iconv( $charset, 'UTF-8', $decoded[0]->text );
+				}
+				
 				$email = $return_path->mailbox . '@' . $return_path->host;
 
 				$emails[] = new Email( $name, $email );
