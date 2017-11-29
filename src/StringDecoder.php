@@ -9,17 +9,17 @@
 
 			switch( $encoding ) {
 				case ENC7BIT:
-					throw new Exception(sprintf("7BIT decoding not supported (uid: %s)", $this->uid));
+					throw new Exception("7BIT decoding not supported");
 
 					break;
 
 				case ENC8BIT: 
-					throw new Exception(sprintf("8BIT decoding not supported (uid: %s)", $this->uid));
+					throw new Exception("8BIT decoding not supported");
 
 					break;
 
 				case ENCBINARY:
-					throw new Exception(spritnf('BINARY decoding not supported (uid: %s)', $this->uid));
+					throw new Exception('BINARY decoding not supported');
 
 					break;
 
