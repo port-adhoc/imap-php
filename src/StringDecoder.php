@@ -10,12 +10,12 @@
 
 			switch( $encoding ) {
 				case ENC7BIT:
-					$decoded = mb_convert_encoding( $string, '7bit', $encode_to );
+					$decoded = mb_convert_encoding( $string, $encode_to, '7bit' );
 
 					break;
 
 				case ENC8BIT: 
-					$decoded = mb_convert_encoding( $string, '8bit', $encode_to );
+					$decoded = mb_convert_encoding( $string, $encode_to, '8bit' );
 
 					break;
 
@@ -25,7 +25,7 @@
 					break;
 
 				case ENCBASE64:
-					$decoded = mb_convert_encoding( $string, 'BASE64', $encode_to );
+					$decoded = mb_convert_encoding( $string, $encode_to, 'BASE64' );
 
 					break;
 
