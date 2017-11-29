@@ -1,6 +1,8 @@
 <?php
 	namespace PortAdhoc\Imap;
 
+	use Exception;
+
 	class StringDecoder {
 		public static function getDecodedString( $string, $encoding ) {
 			$decoded = '';
