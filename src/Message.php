@@ -237,19 +237,19 @@
 					foreach( $this->structure->parts as $index => $part ) {
 						if( property_exists( $part, 'parts' ) ) {
 							if( property_exists( $this->structure, 'parts' ) ) {
-								foreach( $part->parts as $index => $sub_part ) {
+								foreach( $part->parts as $sub_index => $sub_part ) {
 									if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_HTML ) {
 										$this->html_transfer_encoding = $sub_part->encoding;
-										$this->html_section = $index + 1;
+										$this->html_section = (($index + 1) . '.' . ($sub_index + 1));
 									}
 									else if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_TEXT ) {
 										$this->plain_text_transfer_encoding = $sub_part->encoding;
-										$this->plain_text_section = $index + 1;
+										$this->plain_text_section = (($index + 1) . '.' . ($sub_index + 1));
 									}
 									
 									if( $sub_part->ifdisposition && strtolower($sub_part->disposition) == 'attachment' && in_array($sub_part->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {
 										$attachement_section = [
-											'section' => $index + 1,
+											'section' => (($index + 1) . '.' . ($sub_index + 1)),
 											'encoding' => $sub_part->encoding,
 											'filename' => $this->uid . '-' . (new DateTime())->getTimestamp() . 'txt'
 										];
