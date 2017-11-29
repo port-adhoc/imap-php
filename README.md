@@ -21,6 +21,40 @@ composer require port-adhoc/imap
 [back to summary](#summary)
 
 # Usage
+- [Example 1 : traversing a whole mailbox and retriving its content](#example-1--traversing-a-whole-mailbox-and-retriving-its-content)
+
+## Example 1 : traversing a whole mailbox and retriving its content
+```php
+use PortAdhoc\Imap\Imap;
+use PortAdhoc\Imap\Encoding;
+
+$imap = new Imap;
+
+$imap->server = 'example.host.com';
+$imap->port = 993;
+$imap->flags = ['imap', 'ssl', 'readonly'];
+$imap->user = 'example@host.com';
+$imap->password = 'example';
+$imap->mailbox = 'INBOX';
+$imap->start = '1';
+$imap->end = '*';
+
+$imap->connect();
+
+$messages = $imap->getMessages();
+
+foreach( $messages as $message ) {
+  $subject = $message->getSubject();
+  $date = $message->getDate();
+  $from = $message->getFrom();
+  $to = $message->getTo();
+  $cc = $message->getCC();
+  $bcc = $message->getBCC();
+  $text = $message->getPlainText( Encoding::UTF_8 );
+  $html = $message->getPlainText( Encoding::UTF_8 );
+  $attachments = $message->getAttachments();
+}
+```
 
 [back to summary](#summary)
 
