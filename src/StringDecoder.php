@@ -2,19 +2,20 @@
 	namespace PortAdhoc\Imap;
 
 	use Exception;
+	use PortAdhoc\Imap\Encoding;
 
 	class StringDecoder {
-		public static function getDecodedString( $string, $encoding ) {
+		public static function getDecodedString( $string, $encoding, $encode_to ) {
 			$decoded = '';
 
 			switch( $encoding ) {
 				case ENC7BIT:
-					throw new Exception("7BIT decoding not supported");
+					$decoded = mb_convert_encoding( $string, '7bit', $encode_to );
 
 					break;
 
 				case ENC8BIT: 
-					throw new Exception("8BIT decoding not supported");
+					$decoded = mb_convert_encoding( $string, '8bit', $encode_to );
 
 					break;
 
@@ -24,7 +25,7 @@
 					break;
 
 				case ENCBASE64:
-					$decoded = base64_decode( $string );
+					$decoded = mb_convert_encoding( $string, 'BASE64', $encode_to );
 
 					break;
 

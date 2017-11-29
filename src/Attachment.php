@@ -2,6 +2,7 @@
 	namespace PortAdhoc\Imap;
 
 	use PortAdhoc\Imap\StringDecoder;
+	use PortAdhoc\Imap\Encoding;
 
 	class Attachment {
 		/**
@@ -63,17 +64,17 @@
 		/**
 		 * @return string
 		 */
-		public function getContent() {
-			$this->getBody();
+		public function getContent( $encoding = Encoding::UTF_8 ) {
+			$this->getBody( $encoding );
 
 			return $this->body;
 		}
 
-		private function getBody() {
+		private function getBody( $encoding ) {
 			if( ! $this->body_fetched ) {
 				$body = imap_fetchbody( $this->imap_handler , $this->uid, $this->section, FT_UID & FT_PEEK);
 
-				$this->body = StringDecoder::getDecodedString( $body, $this->encoding );
+				$this->body = StringDecoder::getDecodedString( $body, $this->encoding, $encoding );
 			}
 		}
 	}

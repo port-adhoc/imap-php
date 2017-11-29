@@ -132,14 +132,14 @@
 		/**
 		 * @return string
 		 */
-		public function getPlainText() {
+		public function getPlainText( $encoding = Encoding::UTF_8 ) {
 			$begin = microtime(true);
 
 			$this->getStruct();
 
 			$plain_text = imap_fetchbody( $this->imap_handler, $this->uid, $this->plain_text_section, FT_UID && FT_PEEK );
 
-			$plain_text = StringDecoder::getDecodedString( $plain_text, $this->plain_text_transfer_encoding );
+			$plain_text = StringDecoder::getDecodedString( $plain_text, $this->plain_text_transfer_encoding, $encoding );
 
 			$this->plain_text_fetching_time = microtime(true) - $begin;
 
@@ -211,14 +211,14 @@
 		/**
 		 * @return string
 		 */
-		public function getHtml() {
+		public function getHtml( $encoding = Encoding::UTF_8 ) {
 			$begin = microtime(true);
 
 			$this->getStruct();
 
 			$html = imap_fetchbody( $this->imap_handler, $this->uid, $this->html_section, FT_UID && FT_PEEK );
 
-			$html = StringDecoder::getDecodedString( $html, $this->html_transfer_encoding );
+			$html = StringDecoder::getDecodedString( $html, $this->html_transfer_encoding, $encoding );
 
 			$this->html_fetching_time = microtime(true) - $begin;
 
