@@ -30,7 +30,7 @@
 					break;
 
 				case ENCQUOTEDPRINTABLE:
-					$decoded = quoted_printable_decode( $string );
+					$decoded = mb_convert_encoding(quoted_printable_decode( $string ), $encode_to);
 
 					break;
 
