@@ -239,58 +239,63 @@
 					$this->header_section = 0;
 				}
 
+				/**
+				 * If it contains parts
+				 */
 				if( property_exists( $this->structure, 'parts' ) ) {
 					foreach( $this->structure->parts as $index => $part ) {
+						/**
+                         * If one of the parts contains itself some parts, we will traverse them
+                         * Happens when the mail body is composed of inlines attachments like videos, images, ...
+						 */
 						if( property_exists( $part, 'parts' ) ) {
-							if( property_exists( $this->structure, 'parts' ) ) {
-								foreach( $part->parts as $sub_index => $sub_part ) {
-									if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_HTML ) {
-										$this->html_transfer_encoding = $sub_part->encoding;
-										$this->html_section = (($index + 1) . '.' . ($sub_index + 1));
+							foreach( $part->parts as $sub_index => $sub_part ) {
+								if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_HTML ) {
+									$this->html_transfer_encoding = $sub_part->encoding;
+									$this->html_section = (($index + 1) . '.' . ($sub_index + 1));
 
-										if( $sub_part->ifparameters ) {
-											foreach( $sub_part->parameters as $parameter ) {
-												if( $parameter->attribute === 'charset' ) {
-													$this->html_charset = $parameter->value;
-												}
+									if( $sub_part->ifparameters ) {
+										foreach( $sub_part->parameters as $parameter ) {
+											if( $parameter->attribute === 'charset' ) {
+												$this->html_charset = $parameter->value;
 											}
 										}
 									}
-									else if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_TEXT ) {
-										$this->plain_text_transfer_encoding = $sub_part->encoding;
-										$this->plain_text_section = (($index + 1) . '.' . ($sub_index + 1));
+								}
+								else if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_TEXT ) {
+									$this->plain_text_transfer_encoding = $sub_part->encoding;
+									$this->plain_text_section = (($index + 1) . '.' . ($sub_index + 1));
 
-										if( $sub_part->ifparameters ) {
-											foreach( $sub_part->parameters as $parameter ) {
-												if( $parameter->attribute === 'charset' ) {
-													$this->plain_text_charset = $parameter->value;
-												}
+									if( $sub_part->ifparameters ) {
+										foreach( $sub_part->parameters as $parameter ) {
+											if( $parameter->attribute === 'charset' ) {
+												$this->plain_text_charset = $parameter->value;
 											}
 										}
 									}
-									
-									if( $sub_part->ifdisposition && strtolower($sub_part->disposition) == 'attachment' && in_array($sub_part->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {
-										$attachement_section = [
-											'section' => (($index + 1) . '.' . ($sub_index + 1)),
-											'encoding' => $sub_part->encoding,
-											'filename' => $this->uid . '-' . (new DateTime())->getTimestamp() . 'txt'
-										];
+								}
+								
+								if( $sub_part->ifdisposition && strtolower($sub_part->disposition) == 'attachment' && in_array($sub_part->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {
+									$attachement_section = [
+										'section' => (($index + 1) . '.' . ($sub_index + 1)),
+										'encoding' => $sub_part->encoding,
+										'filename' => $this->uid . '-' . (new DateTime())->getTimestamp() . 'txt'
+									];
 
-										if( $sub_part->ifdparameters ) {
-											foreach( $sub_part->dparameters as $dparameter ) {
-												if( strtolower($dparameter->attribute) == 'filename' ) {
-													$attachement_section['filename'] = $dparameter->value;
-												}
+									if( $sub_part->ifdparameters ) {
+										foreach( $sub_part->dparameters as $dparameter ) {
+											if( strtolower($dparameter->attribute) == 'filename' ) {
+												$attachement_section['filename'] = $dparameter->value;
 											}
 										}
-										else if( $sub_part->ifdescription ) {
-											$attachement_section['filename'] = $sub_part->description;
-										}
-
-										$this->attachements_sections[] = $attachement_section;
 									}
-								}					
-							}
+									else if( $sub_part->ifdescription ) {
+										$attachement_section['filename'] = $sub_part->description;
+									}
+
+									$this->attachements_sections[] = $attachement_section;
+								}
+							}		
 						}
 						else {
 							if( $part->type == TYPETEXT && strtoupper($part->subtype) == self::SUBTYPE_HTML ) {
@@ -342,6 +347,58 @@
 							}
 						}
 					}					
+				}
+				/** 
+				 * If it is only composed of one single part
+				 */
+				else {
+					if( $this->structure->type == TYPETEXT && strtoupper($this->structure->subtype) == self::SUBTYPE_HTML ) {
+						$this->html_transfer_encoding = $this->structure->encoding;
+						$this->html_section = 1;
+
+						if( $this->structure->ifparameters ) {
+							foreach( $this->structure->parameters as $parameter ) {
+								if( $parameter->attribute === 'charset' ) {
+									$this->html_charset = $parameter->value;
+
+									break;
+								}
+							}
+						}
+					}
+					else if( $this->structure->type == TYPETEXT && strtoupper($this->structure->subtype) == self::SUBTYPE_TEXT ) {
+						$this->plain_text_transfer_encoding = $this->structure->encoding;
+						$this->plain_text_section = 1;
+
+						if( $this->structure->ifparameters ) {
+							foreach( $this->structure->parameters as $parameter ) {
+								if( $parameter->attribute === 'charset' ) {
+									$this->plain_text_charset = $parameter->value;
+								}
+							}
+						}
+					}
+					
+					if( $this->structure->ifdisposition && strtolower($this->structure->disposition) == 'attachment' && in_array($this->structure->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {
+						$attachement_section = [
+							'section' => 1,
+							'encoding' => $this->structure->encoding,
+							'filename' => $this->uid . '-' . (new DateTime())->getTimestamp() . 'txt'
+						];
+
+						if( $this->structure->ifdparameters ) {
+							foreach( $this->structure->dparameters as $dparameter ) {
+								if( strtolower($dparameter->attribute) == 'filename' ) {
+									$attachement_section['filename'] = $dparameter->value;
+								}
+							}
+						}
+						else if( $this->structure->ifdescription ) {
+							$attachement_section['filename'] = $this->structure->description;
+						}
+
+						$this->attachements_sections[] = $attachement_section;
+					}
 				}
 
 				$this->structure_fetched = true;
