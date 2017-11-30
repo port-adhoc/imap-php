@@ -73,6 +73,11 @@
 		private $attachements_sections;
 
 		/**
+		 * @var string
+		 */
+		private $plain_text_charset;
+
+		/**
 		 * @param resource $imap_handler
 		 * @param int $uid
 		 * @throws InvalidArgumentException
@@ -104,6 +109,7 @@
 			$this->plain_text_transfer_encoding = ENCOTHER;
 			$this->header_section = 0;
 			$this->attachements_sections = [];
+			$this->plain_text_charset = 'utf-8';
 		}
 
 		public function getImap() {
@@ -139,7 +145,7 @@
 
 			$plain_text = imap_fetchbody( $this->imap_handler, $this->uid, $this->plain_text_section, FT_UID && FT_PEEK );
 
-			$plain_text = StringDecoder::getDecodedString( $plain_text, $this->plain_text_transfer_encoding, $encoding );
+			$plain_text = StringDecoder::getDecodedString( $plain_text, $this->plain_text_charset, $this->plain_text_transfer_encoding, $encoding );
 
 			$this->plain_text_fetching_time = microtime(true) - $begin;
 
@@ -218,7 +224,7 @@
 
 			$html = imap_fetchbody( $this->imap_handler, $this->uid, $this->html_section, FT_UID && FT_PEEK );
 
-			$html = StringDecoder::getDecodedString( $html, $this->html_transfer_encoding, $encoding );
+			$html = StringDecoder::getDecodedString( $html, 'utf-8', $this->html_transfer_encoding, $encoding );
 
 			$this->html_fetching_time = microtime(true) - $begin;
 
@@ -241,10 +247,26 @@
 									if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_HTML ) {
 										$this->html_transfer_encoding = $sub_part->encoding;
 										$this->html_section = (($index + 1) . '.' . ($sub_index + 1));
+
+										if( $sub_part->ifparameters ) {
+											foreach( $sub_part->parameters as $parameter ) {
+												if( $parameter->attribute === 'charset' ) {
+													$this->html_charset = $parameter->value;
+												}
+											}
+										}
 									}
 									else if( $sub_part->type == TYPETEXT && strtoupper($sub_part->subtype) == self::SUBTYPE_TEXT ) {
 										$this->plain_text_transfer_encoding = $sub_part->encoding;
 										$this->plain_text_section = (($index + 1) . '.' . ($sub_index + 1));
+
+										if( $sub_part->ifparameters ) {
+											foreach( $sub_part->parameters as $parameter ) {
+												if( $parameter->attribute === 'charset' ) {
+													$this->plain_text_charset = $parameter->value;
+												}
+											}
+										}
 									}
 									
 									if( $sub_part->ifdisposition && strtolower($sub_part->disposition) == 'attachment' && in_array($sub_part->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {
@@ -274,10 +296,28 @@
 							if( $part->type == TYPETEXT && strtoupper($part->subtype) == self::SUBTYPE_HTML ) {
 								$this->html_transfer_encoding = $part->encoding;
 								$this->html_section = $index + 1;
+
+								if( $part->ifparameters ) {
+									foreach( $part->parameters as $parameter ) {
+										if( $parameter->attribute === 'charset' ) {
+											$this->html_charset = $parameter->value;
+
+											break;
+										}
+									}
+								}
 							}
 							else if( $part->type == TYPETEXT && strtoupper($part->subtype) == self::SUBTYPE_TEXT ) {
 								$this->plain_text_transfer_encoding = $part->encoding;
 								$this->plain_text_section = $index + 1;
+
+								if( $part->ifparameters ) {
+									foreach( $part->parameters as $parameter ) {
+										if( $parameter->attribute === 'charset' ) {
+											$this->plain_text_charset = $parameter->value;
+										}
+									}
+								}
 							}
 							
 							if( $part->ifdisposition && strtolower($part->disposition) == 'attachment' && in_array($part->type, [TYPETEXT, TYPEAPPLICATION, TYPEAUDIO, TYPEIMAGE, TYPEVIDEO]) ) {

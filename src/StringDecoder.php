@@ -5,17 +5,17 @@
 	use PortAdhoc\Imap\Encoding;
 
 	class StringDecoder {
-		public static function getDecodedString( $string, $encoding, $encode_to ) {
+		public static function getDecodedString( $string, $charset, $encoding, $encode_to ) {
 			$decoded = '';
 
 			switch( $encoding ) {
 				case ENC7BIT:
-					$decoded = mb_convert_encoding( $string, $encode_to, '7bit' );
+					$decoded = mb_convert_encoding( mb_convert_encoding( $string, $charset, '7bit' ), $encode_to, $charset );
 
 					break;
 
 				case ENC8BIT: 
-					$decoded = mb_convert_encoding( $string, $encode_to, '8bit' );
+					$decoded = mb_convert_encoding( mb_convert_encoding( $string, $charset, '7bit' ), $encode_to, $charset );
 
 					break;
 
@@ -25,12 +25,12 @@
 					break;
 
 				case ENCBASE64:
-					$decoded = mb_convert_encoding( $string, $encode_to, 'BASE64' );
+					$decoded = mb_convert_encoding( base64_decode($string), $encode_to, $charset );
 
 					break;
 
 				case ENCQUOTEDPRINTABLE:
-					$decoded = mb_convert_encoding(quoted_printable_decode( $string ), $encode_to);
+					$decoded = mb_convert_encoding( quoted_printable_decode($string), $encode_to, $charset );
 
 					break;
 
